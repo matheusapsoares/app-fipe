@@ -67,4 +67,4 @@ jobs:
           cd /root/projects/app-fipe
           echo "Running php artisan migrate..."
           docker exec -u root -it app php artisan migrate --force
-          echo "
+          EOF
