@@ -47,7 +47,7 @@ jobs:
           EOF
 
       - name: Wait before continuing
-        run: sleep 10s
+        run: sleep 5s
 
       - name: Composer install and Composer update
         run: |
