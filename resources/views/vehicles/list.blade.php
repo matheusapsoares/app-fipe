@@ -49,7 +49,7 @@
             <h1 class="h2">Lista de Veículos</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
-                <a href ="{{ route('vehicles.create') }}" class="btn btn-sm btn-outline-success">Adicionar</a>
+                <a href ="{{ route('vehicles.create') }}" class="btn btn-sm btn-outline-dark">Adicionar</a>
               </div>
             </div>
           </div>
