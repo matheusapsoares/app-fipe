@@ -1,0 +1,36 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install sshpass
+      run: sudo apt-get update && sudo apt-get install -y sshpass
+
+    - name: SSH into server and pull latest changes
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}" | sshpass -p- ssh -o StrictHostKeyChecking=no -i /path/to/id_rsa root@161.35.180.120 << 'EOF'
+        cd /path/to/destination
+        echo "Pulling latest changes from Git..."
+        git pull origin main
+        echo "Git pull complete."
+        EOF
+
+    - name: SSH into server and recreate containers
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}" | sshpass -p- ssh -o StrictHostKeyChecking=no -i /path/to/id_rsa root@161.35.180.120 << 'EOF'
+        cd /path/to/destination
+        echo "Recreating containers..."
+        docker-compose down
+        docker-compose up -d
+        echo "Containers recreated."
+        EOF
