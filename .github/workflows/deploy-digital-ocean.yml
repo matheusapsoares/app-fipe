@@ -6,15 +6,21 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Install SSH
-        run: sudo apt-get update && sudo apt-get install -y openssh-client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssh-client
 
       - name: Setup SSH Agent
         uses: webfactory/ssh-agent@v0.5.3
@@ -39,22 +45,13 @@ jobs:
           docker-compose up -d
           echo "Containers recreated."
           EOF
+
       - name: Composer install and Composer update
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@134.209.35.142 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@134.209.35.142 << 'EOF'
           cd /path/to/destination
           echo "Running composer install as root..."
           docker exec -u root -it app composer install
           echo "Composer install complete."
           echo "Running composer update as root..."
-          docker exec -u root -it app composer update
-          echo "Composer update complete."
-          EOF
-      - name: Running migrates
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@134.209.35.142 << 'EOF'
-          cd /root/projects/app-fipe
-          echo "Running php artisan migrate..."
-          docker exec -u root -it app php artisan migrate --force
-          echo "php artisan migrate complete."
-          EOF
+          doc
