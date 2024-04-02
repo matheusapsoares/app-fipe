@@ -1,0 +1,60 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH
+        run: apt-get update && apt-get install -y openssh-client
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Pull latest changes
+        run: |
+          ssh -o StrictHostKeyChecking=no root@161.35.180.120 << 'EOF'
+          cd /root/projects/app-fipe
+          echo "Pulling latest changes from Git..."
+          git pull origin main
+          echo "Git pull complete."
+          EOF
+
+      - name: Recreate containers
+        run: |
+          ssh -o StrictHostKeyChecking=no root@161.35.180.120 << 'EOF'
+          cd /root/projects/app-fipe
+          echo "Recreating containers..."
+          docker-compose down
+          docker-compose up -d
+          echo "Containers recreated."
+          EOF
+      - name: Composer install and Composer update
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@161.35.180.120 << 'EOF'
+          cd /path/to/destination
+          echo "Running composer install as root..."
+          docker exec -u root -it app composer install
+          echo "Composer install complete."
+          echo "Running composer update as root..."
+          docker exec -u root -it app composer update
+          echo "Composer update complete."
+          EOF
+      - name: Running migrates
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@161.35.180.120 << 'EOF'
+          cd /root/projects/app-fipe
+          echo "Running php artisan migrate..."
+          docker exec -u root -it app php artisan migrate --force
+          echo "php artisan migrate complete."
+          EOF
