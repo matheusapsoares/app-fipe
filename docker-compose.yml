@@ -38,10 +38,11 @@ services:
             MYSQL_PASSWORD: ${DB_PASSWORD:-userpass}
             MYSQL_USER: ${DB_USERNAME:-username}
             TZ: "America/Sao_Paulo"
+            MYSQL_SSL_DISABLED: "true" # Esta linha desativa o SSL
         volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
         ports:
-            - "3388:3306"
+            - "3306:3306"
         networks:
             - laravel
     # redis
