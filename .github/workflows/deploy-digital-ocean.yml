@@ -23,7 +23,7 @@ jobs:
 
       - name: Pull latest changes
         run: |
-          ssh -o StrictHostKeyChecking=no root@161.35.180.120 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@134.209.35.142 << 'EOF'
           cd /root/projects/app-fipe
           echo "Pulling latest changes from Git..."
           git pull origin main
@@ -32,7 +32,7 @@ jobs:
 
       - name: Recreate containers
         run: |
-          ssh -o StrictHostKeyChecking=no root@161.35.180.120 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@134.209.35.142 << 'EOF'
           cd /root/projects/app-fipe
           echo "Recreating containers..."
           docker-compose down
@@ -41,7 +41,7 @@ jobs:
           EOF
       - name: Composer install and Composer update
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@161.35.180.120 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@134.209.35.142 << 'EOF'
           cd /path/to/destination
           echo "Running composer install as root..."
           docker exec -u root -it app composer install
@@ -52,7 +52,7 @@ jobs:
           EOF
       - name: Running migrates
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@161.35.180.120 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@134.209.35.142 << 'EOF'
           cd /root/projects/app-fipe
           echo "Running php artisan migrate..."
           docker exec -u root -it app php artisan migrate --force
