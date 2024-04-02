@@ -46,12 +46,9 @@ jobs:
           echo "Containers recreated."
           EOF
 
-      - name: Wait before continuing
-        run: sleep 5s
-
       - name: Composer install and Composer update
         run: |
-          ssh -o StrictHostKeyChecking=no root@134.209.35.142 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@134.209.35.142 << 'EOF'
           cd /path/to/destination
           echo "Running composer install as root..."
           docker exec -u root -it app composer install
@@ -63,8 +60,9 @@ jobs:
 
       - name: Running migrates
         run: |
-          ssh -o StrictHostKeyChecking=no root@134.209.35.142 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@134.209.35.142 << 'EOF'
           cd /root/projects/app-fipe
           echo "Running php artisan migrate..."
           docker exec -u root -it app php artisan migrate --force
+          echo "php artisan migrate complete."
           EOF
