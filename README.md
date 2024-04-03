@@ -29,3 +29,8 @@ $ docker-compose up -d
 # Abra o navegador e entre no endereço abaixo
 http://localhost
 ```
+## Production
+```bash
+# Abra o navegador e entre no endereço abaixo
+http://134.209.35.142
+```
